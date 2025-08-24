@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ادرس معي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            font-family: 'Courier New', monospace;
+        }
+
+        .status {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .study-mode {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .break-mode {
+            background: linear-gradient(45deg, #00d2d3, #54a0ff);
+            box-shadow: 0 4px 15px rgba(0, 210, 211, 0.4);
+        }
+
+        .controls {
+            margin: 2rem 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            border: none;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            border-radius: 50px;
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .progress-ring {
+            width: 200px;
+            height: 200px;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .progress-bg {
+            stroke: rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-bar {
+            stroke: #ffd700;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-40px) rotate(-5deg); }
+            75% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        .motivational-quote {
+            margin-top: 1rem;
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .timer-display { font-size: 3rem; }
+            .container { padding: 1rem; margin: 1rem; }
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-emoji" style="top: 10%; left: 10%;">📚</div>
+    <div class="floating-emoji" style="top: 20%; right: 15%;">✏️</div>
+    <div class="floating-emoji" style="bottom: 20%; left: 20%;">🎯</div>
+    <div class="floating-emoji" style="bottom: 15%; right: 10%;">⭐</div>
+
+    <div class="container">
+        <h1>ادرس معي</h1>
+        
+        <div class="progress-ring">
+            <svg>
+                <circle class="progress-bg" cx="100" cy="100" r="90"></circle>
+                <circle class="progress-bar" cx="100" cy="100" r="90" id="progressCircle"></circle>
+            </svg>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        
+        <div class="status study-mode" id="statusDisplay">
+            📖 وقت الدراسة
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">بدء</button>
+            <button id="pauseBtn" disabled>إيقاف مؤقت</button>
+            <button id="resetBtn">إعادة تعيين</button>
+            <button id="skipBtn">تخطي</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="studySessions">0</div>
+                <div>جلسات دراسة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="breakSessions">0</div>
+                <div>فترات راحة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTime">0</div>
+                <div>دقائق إجمالية</div>
+            </div>
+        </div>
+
+        <div class="motivational-quote" id="motivationalQuote">
+            "النجاح هو مجموع الجهود الصغيرة المتكررة يوماً بعد يوم"
+        </div>
+    </div>
+
+    <script>
+        class StudyTimer {
+            constructor() {
+                this.isRunning = false;
+                this.isStudyMode = true;
+                this.timeLeft = 25 * 60; // 25 minutes in seconds
+                this.studyTime = 25 * 60;
+                this.breakTime = 5 * 60;
+                this.interval = null;
+                this.studySessions = 0;
+                this.breakSessions = 0;
+                this.totalMinutes = 0;
+                
+                this.initializeElements();
+                this.updateDisplay();
+                this.updateProgress();
+                this.loadStats();
+                this.rotateQuotes();
+            }
+
+            initializeElements() {
+                this.timerDisplay = document.getElementById('timerDisplay');
+                this.statusDisplay = document.getElementById('statusDisplay');
+                this.startBtn = document.getElementById('startBtn');
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.skipBtn = document.getElementById('skipBtn');
+                this.progressCircle = document.getElementById('progressCircle');
+                this.studySessionsDisplay = document.getElementById('studySessions');
+                this.breakSessionsDisplay = document.getElementById('breakSessions');
+                this.totalTimeDisplay = document.getElementById('totalTime');
+
+                this.startBtn.addEventListener('click', () => this.start());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.resetBtn.addEventListener('click', () => this.reset());
+                this.skipBtn.addEventListener('click', () => this.skip());
+
+                // Set up progress circle
+                const circumference = 2 * Math.PI * 90;
+                this.progressCircle.style.strokeDasharray = circumference;
+            }
+
+            start() {
+                this.isRunning = true;
+                this.startBtn.disabled = true;
+                this.pauseBtn.disabled = false;
+                
+                this.interval = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateDisplay();
+                    this.updateProgress();
+                    
+                    if (this.timeLeft <= 0) {
+                        this.complete();
+                    }
+                }, 1000);
+            }
+
+            pause() {
+                this.isRunning = false;
+                this.startBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                clearInterval(this.interval);
+            }
+
+            reset() {
+                this.pause();
+                this.timeLeft = this.isStudyMode ? this.studyTime : this.breakTime;
+                this.updateDisplay();
+                this.updateProgress();
+            }
+
+            skip() {
+                this.pause();
+                this.complete();
+            }
+
+            complete() {
+                this.pause();
+                
+                if (this.isStudyMode) {
+                    this.studySessions++;
+                    this.totalMinutes += 25;
+                    this.isStudyMode = false;
+                    this.timeLeft = this.breakTime;
+                    this.statusDisplay.textContent = '☕ وقت الراحة';
+                    this.statusDisplay.className = 'status break-mode';
+                    this.playNotification('انتهت جلسة الدراسة! استمتع بفترة الراحة 😊');
+                } else {
+                    this.breakSessions++;
+                    this.totalMinutes += 5;
+                    this.isStudyMode = true;
+                    this.timeLeft = this.studyTime;
+                    this.statusDisplay.textContent = '📖 وقت الدراسة';
+                    this.statusDisplay.className = 'status study-mode';
+                    this.playNotification('انتهت فترة الراحة! عودة إلى الدراسة 💪');
+                }
+                
+                this.updateDisplay();
+                this.updateProgress();
+                this.updateStats();
+                this.saveStats();
+            }
+
+            updateDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                this.timerDisplay.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            updateProgress() {
+                const totalTime = this.isStudyMode ? this.studyTime : this.breakTime;
+                const progress = (totalTime - this.timeLeft) / totalTime;
+                const circumference = 2 * Math.PI * 90;
+                const dashArray = circumference * progress;
+                this.progressCircle.style.strokeDasharray = `${dashArray} ${circumference}`;
+            }
+
+            updateStats() {
+                this.studySessionsDisplay.textContent = this.studySessions;
+                this.breakSessionsDisplay.textContent = this.breakSessions;
+                this.totalTimeDisplay.textContent = this.totalMinutes;
+            }
+
+            saveStats() {
+                const stats = {
+                    studySessions: this.studySessions,
+                    breakSessions: this.breakSessions,
+                    totalMinutes: this.totalMinutes
+                };
+                // Note: Using variables instead of localStorage for Claude.ai compatibility
+                window.studyStats = stats;
+            }
+
+            loadStats() {
+                const stats = window.studyStats || {
+                    studySessions: 0,
+                    breakSessions: 0,
+                    totalMinutes: 0
+                };
+                this.studySessions = stats.studySessions;
+                this.breakSessions = stats.breakSessions;
+                this.totalMinutes = stats.totalMinutes;
+                this.updateStats();
+            }
+
+            playNotification(message) {
+                // Visual notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(45deg, #ff6b6b, #ffd700);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 10px;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                    z-index: 1000;
+                    font-weight: bold;
+                    animation: slideIn 0.5s ease-out;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+
+                // Try to play sound (may not work in all browsers without user interaction)
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTeX0fPTgjMGHm/A7+OZURE=');
+                    audio.volume = 0.3;
+                    audio.play().catch(() => {}); // Ignore errors if audio doesn't play
+                } catch (e) {}
+            }
+
+            rotateQuotes() {
+                const quotes = [
+                    "النجاح هو مجموع الجهود الصغيرة المتكررة يوماً بعد يوم",
+                    "العقل السليم في الجسم السليم، والراحة جزء من النجاح",
+                    "كل دقيقة تقضيها في التخطيط توفر عليك عشر دقائق في التنفيذ",
+                    "التعلم رحلة لا وجهة، والمثابرة هي الوقود",
+                    "أعظم انتصار هو انتصارك على نفسك"
+                ];
+                
+                let currentQuote = 0;
+                setInterval(() => {
+                    currentQuote = (currentQuote + 1) % quotes.length;
+                    document.getElementById('motivationalQuote').textContent = quotes[currentQuote];
+                }, 30000); // Change quote every 30 seconds
+            }
+        }
+
+        // Initialize the app
+        const studyTimer = new StudyTimer();
+
+        // Add some visual effects
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createFloatingEmoji();
+            }
+        }, 3000);
+
+        function createFloatingEmoji() {
+            const emojis = ['⭐', '💫', '✨', '🌟'];
+            const emoji = document.createElement('div');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.cssText = `
+                position: absolute;
+                font-size: 1.5rem;
+                pointer-events: none;
+                animation: fadeFloat 4s ease-out forwards;
+                left: ${Math.random() * 100}%;
+                top: 100%;
+                z-index: -1;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeFloat {
+                    0% { opacity: 0; transform: translateY(0); }
+                    10% { opacity: 1; }
+                    100% { opacity: 0; transform: translateY(-200px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 4000);
+        }
+    </script>
+
+    <footer>
+        made with ❤️ by mahmood mohammed
+    </footer>
+</body>
+</html>
